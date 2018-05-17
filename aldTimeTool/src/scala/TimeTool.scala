@@ -6,14 +6,13 @@ object TimeTool {
 
     //获取月开始和结束时间
     val sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss")
-    private val calendar1 = Calendar.getInstance()
-    calendar1.add(Calendar.MONTH, -1)
-    calendar1.set(Calendar.DAY_OF_MONTH, 1)
-    private val lastMonthStart = sdf.format(calendar1.getTime)
-
-    private val calendar2 = Calendar.getInstance()
-    calendar2.set(Calendar.DAY_OF_MONTH, 0)
-    private val lastMonthEnd = sdf.format(calendar2.getTime)
+    private val calendar = Calendar.getInstance()
+    calendar.add(Calendar.MONTH, -1)
+    calendar.set(Calendar.DAY_OF_MONTH, 1)
+    private val lastMonthStart = sdf.format(calendar.getTime)
+    calendar.add(Calendar.MONTH,1)
+    calendar.set(Calendar.DAY_OF_MONTH,0)
+    private val lastMonthEnd = sdf.format(calendar.getTime)
 
     def getLMS = day2Stamp(lastMonthStart.substring(0, 8))
     def getLME = day2Stamp(lastMonthEnd.substring(0, 8))
