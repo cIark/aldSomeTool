@@ -12,6 +12,7 @@ object TestBitMap {
     bitMap.setBit(500)
     println(bitMap.exists(500))
     println(bitMap.exists(499))
-    bitMap.show
+    val a = bitMap.array
+    a.foreach(println)
   }
 }
