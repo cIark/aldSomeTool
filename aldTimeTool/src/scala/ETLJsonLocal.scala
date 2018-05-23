@@ -1,7 +1,5 @@
 import java.util.regex.Pattern
 import com.alibaba.fastjson.{JSON, JSONObject}
-import org.apache.hadoop.conf.Configuration
-import org.apache.hadoop.fs.{FileSystem, FileUtil, Path}
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.types.{StringType, StructField, StructType}
@@ -73,23 +71,8 @@ object ETLJsonLocal {
     val spark = SparkSession.builder()
       .master("local[*]")
       .appName(this.getClass.getName)
-//      .config("spark.speculation", true)
-//      .config("spark.sql.caseSensitive", true)
       .getOrCreate()
 
-//    //todo 这里直接用了原来的时间工具类，没有掌握清楚，回头自己写一个
-//    val today = TimeUtil.processArgs(args)
-//    val hour = TimeUtil.processArgsHour(args)
-//    val conf = new Configuration()
-//    conf.set("fs.defaultFS", FilePaths.hdfsurl)
-//    val fileSystem = FileSystem.get(conf)
-//    val paths = FilePaths.jsonpath
-//    val fs = fileSystem.listStatus((new Path(paths + today)))
-//    val listPath = FileUtil.stat2Paths(fs).filter(_.toString.contains(s"$hour.json"))
-//    listPath.foreach(readPath => {
-//      val fileName = readPath.toString.split("/")(5).split("\\.")(0)
-//      val savePath = FilePaths.parquet_result + s"/$today/etl-$fileName-$hour"
-//      val file = spark.read.text(s"$readPath")
     val file = spark.read.text("C:\\Users\\clark\\Desktop\\DataSource\\json20.json")
     val today = "2018-04-01"
     val hour ="00"
