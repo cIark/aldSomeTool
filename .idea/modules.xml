@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/aldSomeTool.iml" filepath="$PROJECT_DIR$/.idea/aldSomeTool.iml" />
-      <module fileurl="file://$PROJECT_DIR$/aldTimeTool/aldTimeTool.iml" filepath="$PROJECT_DIR$/aldTimeTool/aldTimeTool.iml" />
     </modules>
   </component>
 </project>

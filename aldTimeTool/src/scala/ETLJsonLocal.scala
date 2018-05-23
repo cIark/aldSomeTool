@@ -9,6 +9,7 @@ import org.apache.spark.sql.{DataFrame, Row, SparkSession}
 
 import scala.collection.mutable.ListBuffer
 
+
 object ETLJsonLocal {
   val fieldList =
     Array("client_ip", "(([01]?\\d?\\d|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d?\\d|2[0-4]\\d|25[0-5])") ::
@@ -72,8 +73,23 @@ object ETLJsonLocal {
     val spark = SparkSession.builder()
       .master("local[*]")
       .appName(this.getClass.getName)
+//      .config("spark.speculation", true)
+//      .config("spark.sql.caseSensitive", true)
       .getOrCreate()
 
+//    //todo 这里直接用了原来的时间工具类，没有掌握清楚，回头自己写一个
+//    val today = TimeUtil.processArgs(args)
+//    val hour = TimeUtil.processArgsHour(args)
+//    val conf = new Configuration()
+//    conf.set("fs.defaultFS", FilePaths.hdfsurl)
+//    val fileSystem = FileSystem.get(conf)
+//    val paths = FilePaths.jsonpath
+//    val fs = fileSystem.listStatus((new Path(paths + today)))
+//    val listPath = FileUtil.stat2Paths(fs).filter(_.toString.contains(s"$hour.json"))
+//    listPath.foreach(readPath => {
+//      val fileName = readPath.toString.split("/")(5).split("\\.")(0)
+//      val savePath = FilePaths.parquet_result + s"/$today/etl-$fileName-$hour"
+//      val file = spark.read.text(s"$readPath")
     val file = spark.read.text("C:\\Users\\clark\\Desktop\\DataSource\\json20.json")
     val today = "2018-04-01"
     val hour ="00"
@@ -153,14 +169,14 @@ object ETLJsonLocal {
   def putStDayHour(json_object: JSONObject, result_list: ListBuffer[String], today: String, hour: String): ListBuffer[String] = {
     if (json_object.containsKey("st") && is_matched("\\d{13}", json_object.get("st").toString.trim)) {
       val st = json_object.get("st").toString.trim
-      if (TimeUtil.st2Day(st.toLong).replaceAll("-", "") == today) {
-        if (TimeUtil.st2hour(st.toLong) == hour) {
+      if (TimeTool.stamp2Day(st.toLong).replaceAll("-", "") == today) {
+        if (TimeTool.stamp2OnlyHour(st.toLong) == hour) {
           result_list.+=(st)
-          result_list.+=(TimeUtil.st2Day(st.toLong)) //day
-          result_list.+=(TimeUtil.st2hour(st.toLong)) //hour
+          result_list.+=(TimeTool.stamp2Day(st.toLong)) //day
+          result_list.+=(TimeTool.stamp2OnlyHour(st.toLong)) //hour
         } else {
           val time = today + hour + "0000"
-          val timestap = TimeUtil.time2st(time)
+          val timestap = TimeTool.time2Stamp(time).toString
           result_list.+=(timestap)
           result_list.+=(today)
           result_list.+=(hour)
@@ -172,14 +188,14 @@ object ETLJsonLocal {
       }
     } else if (json_object.containsKey("ts") && is_matched("\\d{13}", json_object.get("ts").toString.trim)) {
       val st = json_object.get("ts").toString.trim
-      if (TimeUtil.st2Day(st.toLong).replaceAll("-", "") == today) {
-        if (TimeUtil.st2hour(st.toLong) == hour) {
+      if (TimeTool.stamp2Day(st.toLong).replaceAll("-", "") == today) {
+        if (TimeTool.stamp2OnlyHour(st.toLong) == hour) {
           result_list.+=(st)
-          result_list.+=(TimeUtil.st2Day(st.toLong)) //day
-          result_list.+=(TimeUtil.st2hour(st.toLong)) //hour
+          result_list.+=(TimeTool.stamp2Day(st.toLong)) //day
+          result_list.+=(TimeTool.stamp2OnlyHour(st.toLong)) //hour
         } else {
           val time = today + hour + "0000"
-          val timestap = TimeUtil.time2st(time)
+          val timestap = TimeTool.time2Stamp(time).toString
           result_list.+=(timestap)
           result_list.+=(today)
           result_list.+=(hour)
