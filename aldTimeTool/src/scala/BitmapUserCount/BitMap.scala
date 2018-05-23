@@ -9,7 +9,7 @@ case class BitMap(row: Int = 10000) {
 
   def show = {
     array.foreach(int => {
-      for (i <- 0 to 32) {
+      for (i <- 0 to 31) {
         print(int >> i & 1)
       }
       println()
@@ -44,7 +44,7 @@ case class BitMap(row: Int = 10000) {
       (for (index <- 0 until array.length) yield array(index).|(brray(index))).toArray
     }
   }
-  def join(bitMap: BitMap)={
+  def joinBitMap(bitMap: BitMap)={
     val brray = bitMap.array
     bitMap.setMap(
       join(brray)
