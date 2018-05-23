@@ -1,4 +1,4 @@
-package BitmapUserCount
+import BitmapUserCount.BitMap
 
 object TestBitMap {
   def main(args: Array[String]): Unit = {
