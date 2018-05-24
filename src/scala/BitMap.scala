@@ -1,9 +1,7 @@
-case class BitMap(row: Int = 10000) {
-  var array: Array[Int] = new Array[Int](row)
+class BitMap(row: Int = 100) {
+  val array = new Array[Int](row)
 
-  def setMap(bitmap: Array[Int]) = array = bitmap
-
-  def getMap: Array[Int] = array
+  def getMap = array
 
   def show = {
     array.foreach(int => {
@@ -14,6 +12,7 @@ case class BitMap(row: Int = 10000) {
     })
   }
 
+
   def setBit(i: Int) {
     if (i >> 5 < row) {
       array(i >> 5) |= (1 << (i & 0X1F))
@@ -22,32 +21,81 @@ case class BitMap(row: Int = 10000) {
     }
   }
 
+  @deprecated
   def reset(i: Int) {
     array(i >> 5) &= (~(1 << (i & 0X1F)))
   }
 
   def exists(i: Int): Boolean = {
-    (array(i >> 5) & (1 << (i & 0X1F))) != 0
+    if (i >> 5 < row) {
+      (array(i >> 5) & (1 << (i & 0X1F))) != 0
+    } else {
+      false
+    }
   }
+
 
   def join(brray: Array[Int]) = {
     if (array.length < brray.length) {
-      (for (index <- 0 until array.length) yield array(index).|(brray(index))).++:(brray.takeRight(brray.length - array.length)).toArray
+      (for (index <- 0 until array.length) yield array(index) | (brray(index))) ++: (brray.takeRight(brray.length - array.length))
 
 
     } else if ((array.length > brray.length)) {
-      (for (index <- 0 until brray.length) yield array(index).|(brray(index))) ++: (array.takeRight(array.length - brray.length)).toArray
+      (for (index <- 0 until brray.length) yield array(index) | (brray(index))) ++: (array.takeRight(array.length - brray.length))
 
     } else {
-      (for (index <- 0 until array.length) yield array(index).|(brray(index))).toArray
+      (for (index <- 0 until array.length) yield array(index) | (brray(index))).toArray
     }
   }
-  def joinBitMap(bitMap: BitMap)={
-    val brray = bitMap.array
-    bitMap.setMap(
-      join(brray)
-    )
-    bitMap
+  def join(bitMap: BitMap): Array[Int] = {
+    join(bitMap.getMap)
+  }
+  def count={
+    array.map(_.toBinaryString.count(bit=>bit=='1')).reduce(_+_)
+  }
+
+
+}
+object BitMap{
+
+  def setBit(array: Array[Int],i: Int) {
+    if (i >> 5 < array.length) {
+      array(i >> 5) |= (1 << (i & 0X1F))
+    } else {
+      println("图长度不足，无法统计")
+    }
+  }
+  def exists(array: Array[Int],i: Int): Boolean = {
+    if (i >> 5 < array.length) {
+      (array(i >> 5) & (1 << (i & 0X1F))) != 0
+    } else {
+      false
+    }
+  }
+  def count(array: Array[Int]):Int={
+    array.map(_.toBinaryString.count(bit=>bit=='1')).reduce(_+_)
+  }
+
+  def join(array: Array[Int],brray: Array[Int]) = {
+    if (array.length < brray.length) {
+      (for (index <- 0 until array.length) yield array(index) | (brray(index))) ++: (brray.takeRight(brray.length - array.length))
+
+
+    } else if ((array.length > brray.length)) {
+      (for (index <- 0 until brray.length) yield array(index) | (brray(index))) ++: (array.takeRight(array.length - brray.length))
+
+    } else {
+      (for (index <- 0 until array.length) yield array(index) | (brray(index))).toArray
+    }
+  }
+
+  def show(array: Array[Int]) = {
+    array.foreach(int => {
+      for (i <- 0 to 31) {
+        print(int >> i & 1)
+      }
+      println()
+    })
   }
 }
 

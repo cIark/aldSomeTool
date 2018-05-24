@@ -27,11 +27,13 @@ object UserTest {
       .option("dbtable", dbtable)
       .load()
 import spark.implicits._
-    val bitMap = BitMap(5)
+    val bitMap = new BitMap(5)
 
     val IDdf = uuDF.join(jdbcDF, uuDF("uu") === jdbcDF("uuid")).select("id")
     val IDs = IDdf.map(row => row.get(0).toString.toInt)
-    IDs.collect().foreach(id=>bitMap.setBit(id))
+    IDs.collect().foreach(id=>{
+      bitMap.setBit(id)})
     bitMap.show
+    println(bitMap.count)
   }
 }
