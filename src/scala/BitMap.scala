@@ -1,5 +1,3 @@
-package BitmapUserCount
-
 case class BitMap(row: Int = 10000) {
   var array: Array[Int] = new Array[Int](row)
 
@@ -17,7 +15,7 @@ case class BitMap(row: Int = 10000) {
   }
 
   def setBit(i: Int) {
-    if (i >> 5 <= row) {
+    if (i >> 5 < row) {
       array(i >> 5) |= (1 << (i & 0X1F))
     } else {
       println("图长度不足，无法统计")
