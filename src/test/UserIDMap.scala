@@ -25,26 +25,30 @@ object UserIDMap {
       .option("dbtable", dbtable)
       .load().select("uuid")
     uuid_map.createTempView("uuid_map")
-    df.select("uu").distinct().createTempView("df")
+    df.select("uu","ak").distinct().createTempView("df")
     val df2 = spark.sql(
       """
-        |select uu from
-        |(select  a.uu,b.uuid from df a left join uuid_map b on a.uu=b.uuid) tmp
+        |select uu,ak from
+        |(select  a.uu,a.ak,b.uuid from df a left join uuid_map b on a.uu=b.uuid) tmp
         |where uuid is null
       """.stripMargin)
+    df2.show()
 
     df2.foreachPartition(itr => {
       val conn = DriverManager.getConnection(url, username, password)
-      val ps2 = conn.prepareStatement("insert into uuid_map (uuid) values(?)")
+      val ps2 = conn.prepareStatement("insert into uuid_map(uuid,ak) values(?,?)")
       itr.foreach(row => {
         val uuid = row.getString(0)
+        val ak = row.getString(1)
         if (uuid != null) {
           ps2.setString(1, uuid)
+          ps2.setString(2, ak)
           ps2.addBatch()
         }
       })
       ps2.executeBatch()
       conn.close()
+
     })
     spark.stop()
   }
