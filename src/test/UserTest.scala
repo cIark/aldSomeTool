@@ -35,7 +35,7 @@ object UserTest {
       bitMap.setBit(id)
     })
     bitMap.show
-//val resultRDD =spark.sparkContext.makeRDD(bitMap.array)
-//    resultRDD.saveAsTextFile("C:\\Users\\clark\\Desktop\\DataSource\\BitMap")
+val resultRDD =spark.sparkContext.makeRDD(bitMap.array)
+    resultRDD.saveAsTextFile("C:\\Users\\clark\\Desktop\\DataSource\\BitMap")
   }
 }
