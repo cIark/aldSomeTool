@@ -94,7 +94,6 @@ public class MyInterceptor implements Interceptor {
         fields.add("ak");
         fields.add("at");
         fields.add("st");
-        fields.add("server_time");
 
         JSONObject jsonout = new JSONObject();
         Boolean flag = true;
@@ -105,59 +104,9 @@ public class MyInterceptor implements Interceptor {
             }
         }
 
-        //time correction
-
-        //getting open_id
-        if (jsonin.containsKey("op") && !"".equals(jsonin.getString("op"))) {
-            jsonout.put("uu", jsonin.getString("op"));
-        } else if (jsonin.containsKey("avatarUrl") && !"".equals(jsonin.getString("avatarUrl"))) {
-            jsonout.put("uu", jsonin.getString("avatarUrl"));
-        } else if (jsonin.containsKey("uu") && !"".equals(jsonin.getString("uu"))) {
-            jsonout.put("uu", jsonin.getString("uu"));
-        } else {
-            flag = false;
-        }
 
 
-        String st = jsonin.getString("st");
-        String server_time = jsonin.getString("server_time");
-        if (server_time.contains(".")) {
-            String[] server_times = server_time.split("\\.");
-            server_time = server_times[0] + server_times[1];
-        }
 
-        long difftime = 0;
-
-        try {
-            difftime = Long.parseLong(st) - Long.parseLong(server_time);
-
-        } catch (Exception e) {
-            flag = false;
-        }
-        if (flag) {
-            if (difftime > 5000 || difftime < -5000) {
-                jsonout.put("st", server_time);
-            } else {
-                jsonout.put("st", st);
-            }
-        }
-
-        //handling et
-        if (flag && !jsonin.containsKey("et")) {
-            jsonout.put("et", jsonout.getString("st"));
-        }
-
-        //handle ald_share_src
-        if (flag && jsonin.containsKey("ct_path")) {
-            String ct_path = jsonin.getString("ct_path");
-            if (ct_path.contains("ald_share_src=")) {
-                String[] words = ct_path.split("ald_share_src=");
-                System.out.println("ald_share_src:" + words.length);
-                if (words.length == 2) {
-                    jsonout.put("wsr_query_ald_share_src", words[1]);
-                }
-            }
-        }
 
 
         if (flag) {
