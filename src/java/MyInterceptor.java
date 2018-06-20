@@ -9,10 +9,8 @@ import com.alibaba.fastjson.JSONObject;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class MyInterceptor implements Interceptor {
     private String host;
@@ -89,44 +87,44 @@ public class MyInterceptor implements Interceptor {
     }
 
 
-    private String transform(JSONObject jsonin) {
-        Set<String> fields = new HashSet<>();
-        fields.add("ak");
-        fields.add("at");
-        fields.add("st");
+    private String transform(JSONObject json) {
 
-        JSONObject jsonout = new JSONObject();
-        Boolean flag = true;
-        for (String field : fields) {
-            if (!jsonin.containsKey(field)) {
-                flag = false;
-                break;
+        if (json.containsKey("a")) {
+            String ak = json.getString("a");
+            if (ak.length() != 10) {
+                System.out.println("illegal a");
+                return null;
             }
-        }
-
-
-
-
-
-
-        if (flag) {
-            Set<String> keySet = jsonin.keySet();
-            keySet.remove("uu");
-            keySet.remove("st");
-            for (String field : keySet) {
-                jsonout.put(field, jsonin.getString(field));
-            }
-            jsonout.put("ETL", "ETL");
-            String result = jsonout.toString();
-            System.out.println(result);
-
-            return result;
         } else {
-            System.out.println("does not contain one of " + fields.toString());
+            System.out.println("does not contain a");
             return null;
         }
 
+        //time correction
+        long current = System.currentTimeMillis();
+        long zero = current / (1000 * 3600 * 24) * 24 * 3600 * 1000 - 8 * 3600 * 1000;
+        long zero2 = zero + 24 * 3600 * 1000;
 
+
+        String st;
+        if (json.containsKey("st")) {
+            st = json.getString("st");
+        } else{
+            System.out.println("does not contain time");
+            return null;
+        }
+        Long longst = Long.parseLong(st);
+        if (longst > zero2 || longst < zero) {
+            System.out.println("time incorrect");
+            return null;
+        }
+
+        //handling et
+         if(!json.containsKey("et")) {
+            json.put("et", json.getString("st"));
+        }
+        json.put("ETL", "ETL");
+        return json.toString();
     }
 
 }

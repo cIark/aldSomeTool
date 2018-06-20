@@ -73,7 +73,7 @@ object ETLJsonLocal {
       .appName(this.getClass.getName)
       .getOrCreate()
 
-    val file = spark.read.text("C:\\Users\\clark\\Desktop\\DataSource\\json200.json")
+    val file = spark.read.text("C:\\Users\\clark\\Desktop\\ald-log-6.json")
     val today = "2018-04-01"
     val hour ="00"
       val result = execute(file, today, hour)
