@@ -13,14 +13,14 @@ object SaveWhiteList {
       //      .master("local[*]")
       .appName(this.getClass.getName)
       .getOrCreate()
-    val input = "hdfs://10.0.100.17:4007/white_list/20180724/*"
-    val output = "hdfs://10.0.100.17:4007/tmp/whitelist_file1"
+    val input = "hdfs://abc/white_list/20180724/*"
+    val output = "hdfs://abc/tmp/whitelist_file1"
     val file = spark.read.text(input)
     val result: RDD[String] = file.toJSON.rdd.map(line => {
       try {
         val json_line = JSON.parseObject(line).get("value").toString
         val json_object = JSON.parseObject(json_line)
-        if (json_object.getString("ak") == "dc3217b4ee52e505d495c08caa5d1843") {
+        if (json_object.getString("ak") == "abc") {
           json_object.toJSONString
         } else {
           ""
