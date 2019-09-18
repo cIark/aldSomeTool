@@ -14,9 +14,9 @@ import scala.collection.mutable.ArrayBuffer
 object JdbcUtil {
   private var pools: util.LinkedList[Connection] = _ //连接池
   private val driver = "com.mysql.jdbc.Driver"
-  private val url = "jdbc:mysql://10.0.0.61:3306/ald_xinen_test?user=aldwx&password=wxAld2016__$#&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false"
-  private val username = "aldwx"
-  private val password = "wxAld2016__$#"
+  private val url = "jdbc:mysql://10.sdf_$#&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false"
+  private val username = "abc"
+  private val password = "abc"
 
   //加载驱动
   Class.forName(driver)
@@ -161,16 +161,16 @@ object JdbcUtil {
 
   def readFromMysql(sparkSession: SparkSession, table: String): DataFrame = {
     val driver = "com.mysql.jdbc.Driver"
-    val url = "jdbc:mysql://10.0.0.61:3306/ald_xinen_test?user=aldwx&password=wxAld2016__$#&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false"
-    val username = "aldwx"
-    val password = "wxAld2016__$#"
+    val url = "jdbc:mysql://abc#&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false"
+    val username = "abc"
+    val password = "abc"
     // 从 mysql 中读取数据
     val jdbcDF = sparkSession.read
       .format("jdbc")
       .option("driver", driver)
       .option("url", url)
       .option("dbtable", table)
-      .option("user", username)
+      .option("user", username)abd
       .option("password", password)
       .load()
     jdbcDF
