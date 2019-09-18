@@ -10,9 +10,9 @@ object CountTest {
     val array = resultRDD.map(x => x.toString.toInt)
 
     val driver = "com.mysql.jdbc.Driver"
-    val url = "jdbc:mysql://120.52.176.207:3306/ald_xinen?user=test&password=aldwx123&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false"
-    val username = "test"
-    val password = "aldwx123"
+    val url = "jdbc:mysql://abc:3306/ald_xinen?user=abc&password=abc&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false"
+    val username = "abc"
+    val password = "abc"
     val dbtable = "uuid_map"
     val uuid_map = spark.read
       .format("jdbc")
